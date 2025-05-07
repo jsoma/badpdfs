@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Bad PDF Contest</title>
-    <meta name="description" content="Enter the Bad PDF contest! Submit your most frustrating, real-world PDFs and help improve PDF processing for everyone.">
+    <meta name="description"
+        content="Enter the Bad PDF contest! Submit your most frustrating, real-world PDFs and help improve PDF processing for everyone.">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta property="og:title" content="Bad PDF Contest">
     <meta property="og:description" content="Enter the Bad PDF contest! Submit your most frustrating, real-world PDFs.">
@@ -33,12 +34,12 @@
         }
 
         #header {
-            text-align: center;
             margin-bottom: 3em;
         }
 
         #header,
         #footer {
+            text-align: center;
             padding: 5em 0;
             background: black;
             color: white;
@@ -266,7 +267,7 @@
                 <p>You give me bad PDFs, I give you awards.</p>
             </section>
             <section>
-                <h3>Awards</h3>
+                <h3>Awards!</h3>
                 <p>Awards will be given out across several categories. I won't know what worthwhile categories will be
                     until I actually see your docs, but I'm thinking along the lines of:</p>
                 <ul>
@@ -284,7 +285,7 @@
                     reports, Armenian property records, we'll love it all.</p>
             </section>
             <section>
-                <h3>Rules</h3>
+                <h3>Rules!</h3>
                 <p>I made these rules up in five minutes, so I reserve the right to change them on a whim.</p>
                 <ul>
                     <li>Submissions must come through the official form.</li>
@@ -297,14 +298,14 @@
                     <li>Entries must include a brief explanation of the issues with the PDF.</li>
                     <li>Entries will be judged based on how interesting, frustrating, or representative they are of
                         real-world PDF problems.</li>
-                    <li>Entries close on Friday, May 16, midnight NYC time.</li>
                     <li>You're okay with me posting the PDF publicly.</li>
                     <li>You can submit multiple times, but one PDF per submission.</li>
                     <li>Anonymous submissions are allowed but that does make it impossible for me to let you win</li>
                 </ul>
+                <p>Entries (probably) close on Saturday, May 17, midnight NYC time.</p>
             </section>
             <section>
-                <h3>Submit</h3>
+                <h3>Submit!</h3>
                 <iframe
                     data-tally-src="https://tally.so/embed/n0lvry?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1"
                     loading="lazy" width="100%" height="1673" frameborder="0" marginheight="0" marginwidth="0"
@@ -316,16 +317,29 @@
     <div id="footer">
         <div class="container">
             <p>Hi, I'm Jonathan Soma, a data professor at Columbia's J-School.</p>
-            <p>I'm making an <a href="https://jsoma.github.io/natural-pdf/">extraordinarily fun PDF processing
+            <p>I'm making a horrifying <a href="https://jsoma.github.io/natural-pdf/">PDF processing
                     library</a>.</p>
-            <p>I run data journalism programs that are <a
-                    href="https://journalism.columbia.edu/ms-data-journalism">long</a> or <a
-                    href="https://ledeprogram.com/">short</a> or <a
-                    href="https://dataharvest25.sched.com/speaker/jonathan_soma.283qthon?iframe=yes&w=&sidebar=yes&bg=no">tiny</a>.
+            <p>I teach data journalism for a <a href="https://journalism.columbia.edu/ms-data-journalism">long time</a>
+                or <a href="https://ledeprogram.com/">short time</a> or <a
+                    href="https://dataharvest25.sched.com/speaker/jonathan_soma.283qthon?iframe=yes&w=&sidebar=yes&bg=no">tiny
+                    time</a>.
             </p>
-            <p>Find me at <a href="mailto:js4571@columbia.edu">js4571@columbia.edu</a> or <a
-                    href="https://x.com/dangerscarf">@dangerscarf</a> or <a
+            <p><a href="mailto:js4571@columbia.edu">js4571@columbia.edu</a> ░ <a
+                    href="https://x.com/dangerscarf">@dangerscarf</a> ░ <a
                     href="https://bsky.app/profile/dangerscarf.bsky.social">dangerscarf.bsky.social</a></p>
         </div>
     </div>
+    <script>
+        var _paq = window._paq = window._paq || [];
+        /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+        _paq.push(['trackPageView']);
+        _paq.push(['enableLinkTracking']);
+        (function () {
+            var u = "https://badpdfs.matomo.cloud/";
+            _paq.push(['setTrackerUrl', u + 'matomo.php']);
+            _paq.push(['setSiteId', '1']);
+            var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
+            g.async = true; g.src = 'https://cdn.matomo.cloud/badpdfs.matomo.cloud/matomo.js'; s.parentNode.insertBefore(g, s);
+        })();
+    </script>
 </body>
