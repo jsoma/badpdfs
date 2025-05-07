@@ -262,32 +262,16 @@
             '\u0356', '\u0359', '\u035A'
         ];
 
-        function getRandomDiacritic(diacriticArray) {
-            const randomIndex = Math.floor(Math.random() * diacriticArray.length);
-            return diacriticArray[randomIndex];
-        }
-
-        function createZalgoText(text, intensity = 3) {
-            let result = '';
-
-            for (let i = 0; i < text.length; i++) {
-                const char = text[i];
-                result += char;
-
-                // Add random above diacritics
-                const aboveCount = Math.floor(Math.random() * intensity) + 1;
-                for (let j = 0; j < aboveCount; j++) {
-                    result += getRandomDiacritic(aboveDiacritics);
-                }
-
-                // Add random below diacritics
-                const belowCount = Math.floor(Math.random() * intensity) + 1;
-                for (let j = 0; j < belowCount; j++) {
-                    result += getRandomDiacritic(belowDiacritics);
-                }
-            }
-
-            return result;
+        function getTextWidth(text, element) {
+            const span = document.createElement("span");
+            span.innerText = text;
+            span.style.font = window.getComputedStyle(element).font;
+            span.style.visibility = "hidden";
+            span.style.position = "absolute";
+            document.body.appendChild(span);
+            const width = span.offsetWidth;
+            document.body.removeChild(span);
+            return width;
         }
 
         function ensureHeadlineSpans() {
@@ -307,52 +291,134 @@
                 cyanSpan = document.createElement("span");
                 cyanSpan.id = "headline-cyan";
                 cyanSpan.innerText = "bad pdf";
-                emElement.insertBefore(cyanSpan, yellowSpan); // yellowSpan is now guaranteed to exist
+                emElement.insertBefore(cyanSpan, yellowSpan); 
             }
         }
 
-        function changeHeadline() {
-            ensureHeadlineSpans()
-            const cyan = document.querySelector("#headline-cyan");
-            const yellow = document.querySelector("#headline-yellow");
-
-            const baseText = "bad pdf";
-
-            function fitZalgoText(element, intensity) {
-                const originalWidth = getTextWidth(baseText, element);
-                let zalgoText;
-
-                do {
-                    zalgoText = createZalgoText(baseText, intensity);
-                    element.innerText = zalgoText;
-                } while (getTextWidth(zalgoText, element) > originalWidth);
+        class ZalgoAnimator {
+            constructor(element, baseText, initialIntensity = 3, waveSpeedMs = 100) {
+                this.element = element;
+                this.baseText = baseText;
+                this.intensity = initialIntensity;
+                this.waveSpeedMs = waveSpeedMs;
+                this.currentIndex = 0;
+                this.intervalId = null;
+                this.originalChars = this.baseText.split('');
+                this.currentZalgoChars = this.baseText.split(''); 
+                this.maxAllowedWidth = 0; // Will be set in start()
             }
 
-            function getTextWidth(text, element) {
-                const span = document.createElement("span");
-                span.innerText = text;
-                span.style.font = window.getComputedStyle(element).font;
-                span.style.visibility = "hidden";
-                span.style.position = "absolute";
-                document.body.appendChild(span);
-                const width = span.offsetWidth;
-                document.body.removeChild(span);
-                return width;
+            _getRandomDiacritic(diacriticArray) {
+                const randomIndex = Math.floor(Math.random() * diacriticArray.length);
+                return diacriticArray[randomIndex];
             }
 
-            fitZalgoText(cyan, Math.floor(Math.random() * 6));
-            fitZalgoText(yellow, Math.floor(Math.random() * 6));
+            _applyZalgoToChar(char) {
+                let result = char;
+                if (this.intensity > 0) {
+                    const aboveCount = Math.floor(Math.random() * this.intensity) + 1;
+                    for (let j = 0; j < aboveCount; j++) {
+                        result += this._getRandomDiacritic(aboveDiacritics);
+                    }
 
-            if (Math.random() > 0.75) {
-                const cyanZ = window.getComputedStyle(cyan).zIndex;
-                const yellowZ = window.getComputedStyle(yellow).zIndex;
-                cyan.style.zIndex = yellowZ;
-                yellow.style.zIndex = cyanZ;
+                    const belowCount = Math.floor(Math.random() * this.intensity) + 1;
+                    for (let j = 0; j < belowCount; j++) {
+                        result += this._getRandomDiacritic(belowDiacritics);
+                    }
+                }
+                return result;
+            }
+
+            _tick() {
+                if (this.baseText.length > 0 && this.currentIndex < this.originalChars.length) {
+                    const previousCharState = this.currentZalgoChars[this.currentIndex];
+                    const newZalgoChar = this._applyZalgoToChar(this.originalChars[this.currentIndex]);
+
+                    // Tentatively apply the new Zalgo char to measure width
+                    const testChars = [...this.currentZalgoChars]; // Create a copy for testing
+                    testChars[this.currentIndex] = newZalgoChar;
+                    const currentWidth = getTextWidth(testChars.join(''), this.element);
+
+                    if (currentWidth <= this.maxAllowedWidth) {
+                        this.currentZalgoChars[this.currentIndex] = newZalgoChar;
+                    } else {
+                        // If too wide, do nothing, effectively keeping previousCharState for this character
+                        // or, if you want to ensure it doesn't have *new* Zalgo:
+                        // this.currentZalgoChars[this.currentIndex] = this.originalChars[this.currentIndex];
+                        // For now, let's keep the previous state (which might have old Zalgo)
+                    }
+                }
+                
+                this.element.innerText = this.currentZalgoChars.join('');
+                
+                if (this.baseText.length > 0) {
+                    this.currentIndex = (this.currentIndex + 1) % this.baseText.length;
+                } else {
+                    this.currentIndex = 0; // Reset if baseText is empty
+                }
+            }
+
+            start() {
+                if (this.intervalId) this.stop(); 
+                
+                this.currentZalgoChars = this.baseText.split(''); 
+                if (this.element && typeof this.baseText === 'string') {
+                    this.element.innerText = this.baseText; 
+                    // Set maxAllowedWidth here, once the element is surely in the DOM and styled
+                    this.maxAllowedWidth = getTextWidth(this.baseText, this.element);
+                }
+                
+                // No initial tick here, interval will handle first application
+                this.intervalId = setInterval(() => this._tick(), this.waveSpeedMs);
+            }
+
+            stop() {
+                clearInterval(this.intervalId);
+                this.intervalId = null;
+                if (this.element && typeof this.baseText === 'string') { 
+                    this.element.innerText = this.baseText;
+                }
+                this.currentZalgoChars = this.baseText.split(''); // Reset to clean state on stop
+            }
+
+            setIntensity(intensity) {
+                this.intensity = Math.max(0, intensity); 
             }
         }
 
-        window.addEventListener("DOMContentLoaded", changeHeadline);
-        setInterval(changeHeadline, 1500);
+        function initializeZalgoAnimations() {
+            ensureHeadlineSpans();
+            const cyanElement = document.getElementById("headline-cyan");
+            const yellowElement = document.getElementById("headline-yellow");
+            const baseText = "bad pdf"; 
+
+            if (!cyanElement || !yellowElement) {
+                console.error("Zalgo animation error: Headline spans ('headline-cyan', 'headline-yellow') not found.");
+                return;
+            }
+            
+            const cyanAnimator = new ZalgoAnimator(cyanElement, baseText, 3, 250); 
+            const yellowAnimator = new ZalgoAnimator(yellowElement, baseText, 3, 290);
+
+            cyanAnimator.start();
+            setTimeout(() => {
+                yellowAnimator.start();
+            }, 400);
+
+            setInterval(() => {
+                cyanAnimator.setIntensity(Math.floor(Math.random() * 7)); // Intensity 0-6
+                yellowAnimator.setIntensity(Math.floor(Math.random() * 7)); // Intensity 0-6
+
+                if (Math.random() > 0.75) {
+                    const cyanZ = window.getComputedStyle(cyanElement).zIndex;
+                    const yellowZ = window.getComputedStyle(yellowElement).zIndex;
+                    cyanElement.style.zIndex = yellowZ;
+                    yellowElement.style.zIndex = cyanZ;
+                }
+            }, 1500);
+        }
+
+        window.addEventListener("DOMContentLoaded", initializeZalgoAnimations);
     </script>
     <script>
         var _paq = window._paq = window._paq || [];
