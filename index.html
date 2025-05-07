@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Bad PDF Contest</title>
+    <meta name="description" content="Enter the Bad PDF contest! Submit your most frustrating, real-world PDFs and help improve PDF processing for everyone.">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:title" content="Bad PDF Contest">
+    <meta property="og:description" content="Enter the Bad PDF contest! Submit your most frustrating, real-world PDFs.">
+    <meta property="og:url" content="https://badpdfs.com/">
+    <meta property="og:type" content="website">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
+        rel="stylesheet">
+    <link rel="canonical" href="https://badpdfs.com/">
+    <meta property="og:image" content="https://badpdfs.com/screenshot.png">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-size: 20px;
+            line-height: 1.5;
+            font-family: "IBM Plex Serif", Arial, Helvetica, sans-serif;
+            background: rgb(255, 250, 240);
+        }
+
+        .container {
+            max-width: 740px;
+            margin: 0 auto;
+        }
+
+        #header {
+            text-align: center;
+            margin-bottom: 3em;
+        }
+
+        #header,
+        #footer {
+            padding: 5em 0;
+            background: black;
+            color: white;
+        }
+
+        #header a,
+        #footer a {
+            color: pink;
+        }
+
+        h1 {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 9em;
+            margin: 0;
+            margin-top: 0.3em;
+            padding: 0;
+            line-height: 1.2;
+        }
+
+        h1 #contest {
+            display: block;
+            font-size: 0.5em;
+        }
+
+        section {
+            padding-bottom: 1em;
+        }
+
+        h3 {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            text-transform: uppercase;
+            font-size: 1.5em;
+            margin-bottom: 2em;
+            padding: 0.5em 0;
+            background: none;
+            transform: rotate(-4deg);
+            color: black;
+        }
+
+        h3::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 200vw;
+            height: 2.75em;
+            background: yellow;
+            border-bottom: solid black 7px;
+            transform: translate(-50%, -50%);
+            z-index: -1;
+        }
+
+        #header div {
+            position: relative;
+            z-index: 8;
+            max-width: 70%;
+            margin: 0 auto;
+        }
+
+        #footer {
+            font-size: 0.85em;
+        }
+
+        h1 em {
+            position: relative;
+        }
+
+        #headline-cyan {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 2;
+            color: darkcyan;
+        }
+
+        #headline-yellow {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+            color: rgb(161, 0, 161);
+        }
+
+        #headline-over {
+            position: relative;
+            z-index: 10;
+        }
+
+        #contest {
+            position: relative;
+            z-index: 10;
+        }
+
+        @media (max-width:650px) {
+            h1 {
+                font-size: 5em;
+            }
+        }
+
+        @media (max-width:400px) {
+            h1 {
+                font-size: 4em;
+            }
+
+            #header div {
+                font-size: 0.8em;
+            }
+        }
+    </style>
+    <script>
+        const aboveDiacritics = [
+            '\u0300', '\u0301', '\u0302', '\u0303', '\u0304', '\u0305', '\u0306', '\u0307',
+            '\u0308', '\u0309', '\u030A', '\u030B', '\u030C', '\u030D', '\u030E', '\u030F',
+            '\u0310', '\u0311', '\u0312', '\u0313', '\u0314', '\u0315', '\u031A', '\u033E',
+            '\u033F', '\u0340', '\u0341', '\u0342', '\u0343', '\u0344', '\u0346', '\u034A',
+        ];
+
+        const belowDiacritics = [
+            '\u0316', '\u0317', '\u0318', '\u0319', '\u031C', '\u031D', '\u031E', '\u031F',
+            '\u0320', '\u0321', '\u0322', '\u0323', '\u0324', '\u0325', '\u0326', '\u0327',
+            '\u0328', '\u0329', '\u032A', '\u032B', '\u032C', '\u032D', '\u032E', '\u032F',
+            '\u0330', '\u0331', '\u0332', '\u0333', '\u0339', '\u033A', '\u033B', '\u033C',
+            '\u0347', '\u0348', '\u0349', '\u034D', '\u034E', '\u0353', '\u0354', '\u0355',
+            '\u0356', '\u0359', '\u035A'
+        ];
+
+        function getRandomDiacritic(diacriticArray) {
+            const randomIndex = Math.floor(Math.random() * diacriticArray.length);
+            return diacriticArray[randomIndex];
+        }
+
+        function createZalgoText(text, intensity = 3) {
+            let result = '';
+
+            for (let i = 0; i < text.length; i++) {
+                const char = text[i];
+                result += char;
+
+                // Add random above diacritics
+                const aboveCount = Math.floor(Math.random() * intensity) + 1;
+                for (let j = 0; j < aboveCount; j++) {
+                    result += getRandomDiacritic(aboveDiacritics);
+                }
+
+                // Add random below diacritics
+                const belowCount = Math.floor(Math.random() * intensity) + 1;
+                for (let j = 0; j < belowCount; j++) {
+                    result += getRandomDiacritic(belowDiacritics);
+                }
+            }
+
+            return result;
+        }
+
+        function changeHeadline() {
+            const cyan = document.querySelector("#headline-cyan");
+            const yellow = document.querySelector("#headline-yellow");
+
+            const baseText = "bad pdf";
+
+            function fitZalgoText(element, intensity) {
+                const originalWidth = getTextWidth(baseText, element);
+                let zalgoText;
+
+                do {
+                    zalgoText = createZalgoText(baseText, intensity);
+                    element.innerText = zalgoText;
+                } while (getTextWidth(zalgoText, element) > originalWidth);
+            }
+
+            function getTextWidth(text, element) {
+                const span = document.createElement("span");
+                span.innerText = text;
+                span.style.font = window.getComputedStyle(element).font;
+                span.style.visibility = "hidden";
+                span.style.position = "absolute";
+                document.body.appendChild(span);
+                const width = span.offsetWidth;
+                document.body.removeChild(span);
+                return width;
+            }
+
+            fitZalgoText(cyan, Math.floor(Math.random() * 6));
+            fitZalgoText(yellow, Math.floor(Math.random() * 6));
+
+            if (Math.random() > 0.75) {
+                const cyanZ = window.getComputedStyle(cyan).zIndex;
+                const yellowZ = window.getComputedStyle(yellow).zIndex;
+                cyan.style.zIndex = yellowZ;
+                yellow.style.zIndex = cyanZ;
+            }
+        }
+
+        window.addEventListener("onload", changeHeadline)
+        setInterval(changeHeadline, 1500)
+    </script>
+</head>
+
+<body>
+    <div id="header">
+        <div>Hi, I'm Soma! I need to spend $3,000 <em>real quick</em> so I've decided to have a</div>
+        <h1>
+            <em>
+                <span id="headline-cyan">bad pdf</span>
+                <span id="headline-yellow">bad pdf</span>
+                <span id="headline-over">bad pdf</span>
+            </em>
+
+            <span id="contest">contest</span>
+        </h1>
+    </div>
+    <div class="content">
+        <div class="container">
+            <section>
+                <p>Last week Finance told me I have a research budget of $3,753 I need to use in the next ten days.
+                    Please help me spend it on the best possible thing: <strong>garbage!</strong></p>
+                <p>Reporters spend all their time arguing with the government to release documents, and when they
+                    finally succeed the results are in awful, painful PDFs. For the past month I've been working on a <a
+                        href="https://jsoma.github.io/natural-pdf/">Python PDF processing library</a> aimed at making
+                    wrangling these documents a little easier.</p>
+                <p>But! To make sure it's actually a decent piece of software I need examples of <em>bad real-world
+                        PDFs</em>. <strong>So let's have a contest!</strong></p>
+                <p>You give me bad PDFs, I give you awards.</p>
+            </section>
+            <section>
+                <h3>Awards</h3>
+                <p>Awards will be given out across several categories. I won't know what worthwhile categories will be
+                    until I actually see your docs, but I'm thinking along the lines of:</p>
+                <ul>
+                    <li>Tables of data</li>
+                    <li>Forms</li>
+                    <li>Deceptively difficult OCR (text recognition)</li>
+                    <li>Mixed types of <em>stuff</em> in a single document</li>
+                    <li>Non-english-language</li>
+                    <li>Wildcard category for strange or quasi-corrupted PDFs</li>
+                </ul>
+                <p>I'm aiming for six
+                    categories, with four prizes each &mdash; first place gets $250, second place gets $125, and two
+                    runners-up get $75 apiece.</p>
+                <p>But really, submit anything! Official lists of endangered species in Louisiana, police incident
+                    reports, Armenian property records, we'll love it all.</p>
+            </section>
+            <section>
+                <h3>Rules</h3>
+                <p>I made these rules up in five minutes, so I reserve the right to change them on a whim.</p>
+                <ul>
+                    <li>Submissions must come through the official form.</li>
+                    <li>PDFs must be from the real world. <em>Making</em> a bad PDF is a fun creative endeavor
+                        (maybe???) but isn't what we're going for here. I want something you've been sent, found, etc
+                        etc.</li>
+                    <li>PDFs with exploits or whatever the PDF equivalent of a zip bomb is don't fall under our
+                        definition of "bad."</li>
+                    <li>PDFs cannot be password- or DRM-protected.</li>
+                    <li>Entries must include a brief explanation of the issues with the PDF.</li>
+                    <li>Entries will be judged based on how interesting, frustrating, or representative they are of
+                        real-world PDF problems.</li>
+                    <li>Entries close on Friday, May 16, midnight NYC time.</li>
+                    <li>You're okay with me posting the PDF publicly.</li>
+                    <li>You can submit multiple times, but one PDF per submission.</li>
+                    <li>Anonymous submissions are allowed but that does make it impossible for me to let you win</li>
+                </ul>
+            </section>
+            <section>
+                <h3>Submit</h3>
+                <iframe
+                    data-tally-src="https://tally.so/embed/n0lvry?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1"
+                    loading="lazy" width="100%" height="1673" frameborder="0" marginheight="0" marginwidth="0"
+                    title="Bad PDF Submission form"></iframe>
+                <script>var d = document, w = "https://tally.so/widgets/embed.js", v = function () { "undefined" != typeof Tally ? Tally.loadEmbeds() : d.querySelectorAll("iframe[data-tally-src]:not([src])").forEach((function (e) { e.src = e.dataset.tallySrc })) }; if ("undefined" != typeof Tally) v(); else if (d.querySelector('script[src="' + w + '"]') == null) { var s = d.createElement("script"); s.src = w, s.onload = v, s.onerror = v, d.body.appendChild(s); }</script>
+            </section>
+        </div>
+    </div>
+    <div id="footer">
+        <div class="container">
+            <p>Hi, I'm Jonathan Soma, a data professor at Columbia's J-School.</p>
+            <p>I'm making an <a href="https://jsoma.github.io/natural-pdf/">extraordinarily fun PDF processing
+                    library</a>.</p>
+            <p>I run data journalism programs that are <a
+                    href="https://journalism.columbia.edu/ms-data-journalism">long</a> or <a
+                    href="https://ledeprogram.com/">short</a> or <a
+                    href="https://dataharvest25.sched.com/speaker/jonathan_soma.283qthon?iframe=yes&w=&sidebar=yes&bg=no">tiny</a>.
+            </p>
+            <p>Find me at <a href="mailto:js4571@columbia.edu">js4571@columbia.edu</a> or <a
+                    href="https://x.com/dangerscarf">@dangerscarf</a> or <a
+                    href="https://bsky.app/profile/dangerscarf.bsky.social">dangerscarf.bsky.social</a></p>
+        </div>
+    </div>
+</body>
