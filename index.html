@@ -6,9 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Bad PDF Contest</title>
     <meta name="description"
-        content="Enter the Bad PDF contest! Submit your most frustrating, real-world PDFs and help improve PDF processing for everyone.">
+        content="Enter the Bad PDF contest! I'm looking for the most frustrating, painful, real-world PDFs.">
     <meta property="og:title" content="Bad PDF Contest">
-    <meta property="og:description" content="Enter the Bad PDF contest! Submit your most frustrating, real-world PDFs.">
+    <meta property="og:description" content="I'm looking for the most frustrating, painful, real-world PDFs.">
     <meta property="og:url" content="https://badpdfs.com/">
     <meta property="og:type" content="website">
     <meta property="og:image" content="https://badpdfs.com/screenshot.png">
@@ -162,8 +162,6 @@
         <div>Hi, I'm Soma! I need to spend $3,000 <em>real quick</em> so I've decided to have a</div>
         <h1>
             <em>
-                <span id="headline-cyan">bad pdf</span>
-                <span id="headline-yellow">bad pdf</span>
                 <span id="headline-over">bad pdf</span>
             </em>
 
@@ -292,7 +290,29 @@
             return result;
         }
 
+        function ensureHeadlineSpans() {
+            const emElement = document.querySelector("h1 > em");
+            const overSpan = document.getElementById("headline-over");
+
+            let yellowSpan = document.getElementById("headline-yellow");
+            if (!yellowSpan) {
+                yellowSpan = document.createElement("span");
+                yellowSpan.id = "headline-yellow";
+                yellowSpan.innerText = "bad pdf";
+                emElement.insertBefore(yellowSpan, overSpan);
+            }
+
+            let cyanSpan = document.getElementById("headline-cyan");
+            if (!cyanSpan) {
+                cyanSpan = document.createElement("span");
+                cyanSpan.id = "headline-cyan";
+                cyanSpan.innerText = "bad pdf";
+                emElement.insertBefore(cyanSpan, yellowSpan); // yellowSpan is now guaranteed to exist
+            }
+        }
+
         function changeHeadline() {
+            ensureHeadlineSpans()
             const cyan = document.querySelector("#headline-cyan");
             const yellow = document.querySelector("#headline-yellow");
 
@@ -331,8 +351,8 @@
             }
         }
 
-        window.addEventListener("onload", changeHeadline)
-        setInterval(changeHeadline, 1500)
+        window.addEventListener("load", changeHeadline);
+        setInterval(changeHeadline, 1500);
     </script>
     <script>
         var _paq = window._paq = window._paq || [];
