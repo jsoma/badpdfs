@@ -3,21 +3,25 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Bad PDF Contest</title>
     <meta name="description"
         content="Enter the Bad PDF contest! Submit your most frustrating, real-world PDFs and help improve PDF processing for everyone.">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta property="og:title" content="Bad PDF Contest">
     <meta property="og:description" content="Enter the Bad PDF contest! Submit your most frustrating, real-world PDFs.">
     <meta property="og:url" content="https://badpdfs.com/">
     <meta property="og:type" content="website">
+    <meta property="og:image" content="https://badpdfs.com/screenshot.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
         href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
         rel="stylesheet">
     <link rel="canonical" href="https://badpdfs.com/">
-    <meta property="og:image" content="https://badpdfs.com/screenshot.png">
     <style>
         body {
             margin: 0;
@@ -151,93 +155,6 @@
             }
         }
     </style>
-    <script>
-        const aboveDiacritics = [
-            '\u0300', '\u0301', '\u0302', '\u0303', '\u0304', '\u0305', '\u0306', '\u0307',
-            '\u0308', '\u0309', '\u030A', '\u030B', '\u030C', '\u030D', '\u030E', '\u030F',
-            '\u0310', '\u0311', '\u0312', '\u0313', '\u0314', '\u0315', '\u031A', '\u033E',
-            '\u033F', '\u0340', '\u0341', '\u0342', '\u0343', '\u0344', '\u0346', '\u034A',
-        ];
-
-        const belowDiacritics = [
-            '\u0316', '\u0317', '\u0318', '\u0319', '\u031C', '\u031D', '\u031E', '\u031F',
-            '\u0320', '\u0321', '\u0322', '\u0323', '\u0324', '\u0325', '\u0326', '\u0327',
-            '\u0328', '\u0329', '\u032A', '\u032B', '\u032C', '\u032D', '\u032E', '\u032F',
-            '\u0330', '\u0331', '\u0332', '\u0333', '\u0339', '\u033A', '\u033B', '\u033C',
-            '\u0347', '\u0348', '\u0349', '\u034D', '\u034E', '\u0353', '\u0354', '\u0355',
-            '\u0356', '\u0359', '\u035A'
-        ];
-
-        function getRandomDiacritic(diacriticArray) {
-            const randomIndex = Math.floor(Math.random() * diacriticArray.length);
-            return diacriticArray[randomIndex];
-        }
-
-        function createZalgoText(text, intensity = 3) {
-            let result = '';
-
-            for (let i = 0; i < text.length; i++) {
-                const char = text[i];
-                result += char;
-
-                // Add random above diacritics
-                const aboveCount = Math.floor(Math.random() * intensity) + 1;
-                for (let j = 0; j < aboveCount; j++) {
-                    result += getRandomDiacritic(aboveDiacritics);
-                }
-
-                // Add random below diacritics
-                const belowCount = Math.floor(Math.random() * intensity) + 1;
-                for (let j = 0; j < belowCount; j++) {
-                    result += getRandomDiacritic(belowDiacritics);
-                }
-            }
-
-            return result;
-        }
-
-        function changeHeadline() {
-            const cyan = document.querySelector("#headline-cyan");
-            const yellow = document.querySelector("#headline-yellow");
-
-            const baseText = "bad pdf";
-
-            function fitZalgoText(element, intensity) {
-                const originalWidth = getTextWidth(baseText, element);
-                let zalgoText;
-
-                do {
-                    zalgoText = createZalgoText(baseText, intensity);
-                    element.innerText = zalgoText;
-                } while (getTextWidth(zalgoText, element) > originalWidth);
-            }
-
-            function getTextWidth(text, element) {
-                const span = document.createElement("span");
-                span.innerText = text;
-                span.style.font = window.getComputedStyle(element).font;
-                span.style.visibility = "hidden";
-                span.style.position = "absolute";
-                document.body.appendChild(span);
-                const width = span.offsetWidth;
-                document.body.removeChild(span);
-                return width;
-            }
-
-            fitZalgoText(cyan, Math.floor(Math.random() * 6));
-            fitZalgoText(yellow, Math.floor(Math.random() * 6));
-
-            if (Math.random() > 0.75) {
-                const cyanZ = window.getComputedStyle(cyan).zIndex;
-                const yellowZ = window.getComputedStyle(yellow).zIndex;
-                cyan.style.zIndex = yellowZ;
-                yellow.style.zIndex = cyanZ;
-            }
-        }
-
-        window.addEventListener("onload", changeHeadline)
-        setInterval(changeHeadline, 1500)
-    </script>
 </head>
 
 <body>
@@ -329,6 +246,93 @@
                     href="https://bsky.app/profile/dangerscarf.bsky.social">dangerscarf.bsky.social</a></p>
         </div>
     </div>
+    <script>
+        const aboveDiacritics = [
+            '\u0300', '\u0301', '\u0302', '\u0303', '\u0304', '\u0305', '\u0306', '\u0307',
+            '\u0308', '\u0309', '\u030A', '\u030B', '\u030C', '\u030D', '\u030E', '\u030F',
+            '\u0310', '\u0311', '\u0312', '\u0313', '\u0314', '\u0315', '\u031A', '\u033E',
+            '\u033F', '\u0340', '\u0341', '\u0342', '\u0343', '\u0344', '\u0346', '\u034A',
+        ];
+
+        const belowDiacritics = [
+            '\u0316', '\u0317', '\u0318', '\u0319', '\u031C', '\u031D', '\u031E', '\u031F',
+            '\u0320', '\u0321', '\u0322', '\u0323', '\u0324', '\u0325', '\u0326', '\u0327',
+            '\u0328', '\u0329', '\u032A', '\u032B', '\u032C', '\u032D', '\u032E', '\u032F',
+            '\u0330', '\u0331', '\u0332', '\u0333', '\u0339', '\u033A', '\u033B', '\u033C',
+            '\u0347', '\u0348', '\u0349', '\u034D', '\u034E', '\u0353', '\u0354', '\u0355',
+            '\u0356', '\u0359', '\u035A'
+        ];
+
+        function getRandomDiacritic(diacriticArray) {
+            const randomIndex = Math.floor(Math.random() * diacriticArray.length);
+            return diacriticArray[randomIndex];
+        }
+
+        function createZalgoText(text, intensity = 3) {
+            let result = '';
+
+            for (let i = 0; i < text.length; i++) {
+                const char = text[i];
+                result += char;
+
+                // Add random above diacritics
+                const aboveCount = Math.floor(Math.random() * intensity) + 1;
+                for (let j = 0; j < aboveCount; j++) {
+                    result += getRandomDiacritic(aboveDiacritics);
+                }
+
+                // Add random below diacritics
+                const belowCount = Math.floor(Math.random() * intensity) + 1;
+                for (let j = 0; j < belowCount; j++) {
+                    result += getRandomDiacritic(belowDiacritics);
+                }
+            }
+
+            return result;
+        }
+
+        function changeHeadline() {
+            const cyan = document.querySelector("#headline-cyan");
+            const yellow = document.querySelector("#headline-yellow");
+
+            const baseText = "bad pdf";
+
+            function fitZalgoText(element, intensity) {
+                const originalWidth = getTextWidth(baseText, element);
+                let zalgoText;
+
+                do {
+                    zalgoText = createZalgoText(baseText, intensity);
+                    element.innerText = zalgoText;
+                } while (getTextWidth(zalgoText, element) > originalWidth);
+            }
+
+            function getTextWidth(text, element) {
+                const span = document.createElement("span");
+                span.innerText = text;
+                span.style.font = window.getComputedStyle(element).font;
+                span.style.visibility = "hidden";
+                span.style.position = "absolute";
+                document.body.appendChild(span);
+                const width = span.offsetWidth;
+                document.body.removeChild(span);
+                return width;
+            }
+
+            fitZalgoText(cyan, Math.floor(Math.random() * 6));
+            fitZalgoText(yellow, Math.floor(Math.random() * 6));
+
+            if (Math.random() > 0.75) {
+                const cyanZ = window.getComputedStyle(cyan).zIndex;
+                const yellowZ = window.getComputedStyle(yellow).zIndex;
+                cyan.style.zIndex = yellowZ;
+                yellow.style.zIndex = cyanZ;
+            }
+        }
+
+        window.addEventListener("onload", changeHeadline)
+        setInterval(changeHeadline, 1500)
+    </script>
     <script>
         var _paq = window._paq = window._paq || [];
         /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
